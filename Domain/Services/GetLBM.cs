@@ -1,8 +1,5 @@
 ﻿using Domain.Enums;
 using Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Services;
 
@@ -10,11 +7,11 @@ public class GetLBM : IGetLBM
 {
     public Task<double> CalculateLBMAsync(double weight, double height, double neck, double waist, double hip, GenderEnum gender)
     {
-        if (weight <= 0)    throw new ArgumentException("Weight must be greater than zero.");
-        if (height <= 0)    throw new ArgumentException("Height must be greater than zero.");
-        if (neck <= 0)      throw new ArgumentException("Neck must be greater than zero.");
-        if (waist <= 0)     throw new ArgumentException("Waist must be greater than zero.");
-        if (hip <= 0)       throw new ArgumentException("Hip must be greater than zero.");
+        if (weight <= 0) throw new ArgumentException("Weight must be greater than zero.");
+        if (height <= 0) throw new ArgumentException("Height must be greater than zero.");
+        if (neck <= 0) throw new ArgumentException("Neck must be greater than zero.");
+        if (waist <= 0) throw new ArgumentException("Waist must be greater than zero.");
+        if (hip <= 0) throw new ArgumentException("Hip must be greater than zero.");
 
         // LBM = weight * (1-(bfp/100))
 

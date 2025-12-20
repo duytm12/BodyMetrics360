@@ -1,8 +1,5 @@
 ﻿using Domain.Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace Application.DTOs;
 
@@ -34,7 +31,7 @@ public class CalculateLBMRequest
     public double HipInches { get; set; }
 
 
-    [Required(ErrorMessage ="Gender is required")]
+    [Required(ErrorMessage = "Gender is required")]
     [Display(Name = "Gender")]
     public GenderEnum Gender { get; set; }
 

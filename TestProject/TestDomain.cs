@@ -1,8 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
-using Domain.Enums;
+﻿using Domain.Enums;
 using Domain.Services;
-using Xunit;
 
 namespace TestProject.TestDomain
 {

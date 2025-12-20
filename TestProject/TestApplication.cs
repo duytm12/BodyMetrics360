@@ -5,7 +5,6 @@ using Domain.Entities;
 using Domain.Enums;
 using Domain.Interfaces;
 using Domain.Services;
-using Xunit;
 
 namespace TestProject
 {

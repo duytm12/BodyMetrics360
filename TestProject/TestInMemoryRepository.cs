@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Domain.Entities;
-using Infrastructure.InMemory;
-using Xunit;
+﻿using Domain.Entities;
 
 namespace TestProject;
 

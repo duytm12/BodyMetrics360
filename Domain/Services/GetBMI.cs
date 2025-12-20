@@ -1,8 +1,5 @@
 ﻿using Domain.Enums;
 using Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Services;
 
@@ -10,17 +7,17 @@ public class GetBMI : IGetBMI
 {
     public Task<double> CalculateBMIAsync(double weight, double height)
     {
-        if (height <= 0)    throw new ArgumentException("Height must be greater than zero.");
-        if (weight <= 0)    throw new ArgumentException("Weight must be greater than zero.");
+        if (height <= 0) throw new ArgumentException("Height must be greater than zero.");
+        if (weight <= 0) throw new ArgumentException("Weight must be greater than zero.");
         return Task.FromResult(weight / (height * height) * 703);
 
     }
 
     public Task<double> CalculateBMRAsync(double weight, double height, int age, GenderEnum gender)
     {
-        if (weight <= 0)    throw new ArgumentException("Weight must be greater than zero.");
-        if (height <= 0)    throw new ArgumentException("Height must be greater than zero.");
-        if (age <= 0)    throw new ArgumentException("Age must be greater than zero.");
+        if (weight <= 0) throw new ArgumentException("Weight must be greater than zero.");
+        if (height <= 0) throw new ArgumentException("Height must be greater than zero.");
+        if (age <= 0) throw new ArgumentException("Age must be greater than zero.");
 
         double bmr = gender switch
         {
@@ -33,7 +30,7 @@ public class GetBMI : IGetBMI
 
     public Task<double> CalculateTDEEAsync(double bmr, ActivityLevelEnum activityLevel)
     {
-        if (bmr <= 0)   throw new ArgumentException("BMR must be greater than zero.");
+        if (bmr <= 0) throw new ArgumentException("BMR must be greater than zero.");
         double activityMultiplier = activityLevel switch
         {
             ActivityLevelEnum.Sedentary => 1.2,

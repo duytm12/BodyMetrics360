@@ -1,13 +1,7 @@
 ﻿using Application.DTOs;
 using Application.Services;
 using Domain.Entities;
-using Domain.Enums;
 using Domain.Interfaces;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
 
 namespace Application.UseCases;
 
@@ -22,7 +16,7 @@ public class CalculateBFPUseCase(IGetBFP getBFP, IInputRepository inputRepositor
         var existingInput = await _inputRepository.GetLatestAsync();
 
         // 2. Create new Input from request
-        var newInput = new Input ()
+        var newInput = new Input()
         {
             WaistInches = request.WaistInches,
             NeckInches = request.NeckInches,
@@ -36,7 +30,7 @@ public class CalculateBFPUseCase(IGetBFP getBFP, IInputRepository inputRepositor
 
         // 4. Save/update Input
         if (existingInput == null) await _inputRepository.AddAsync(input);
-        
+
         else await _inputRepository.UpdateAsync(input);
 
         // 5. Perform calculations

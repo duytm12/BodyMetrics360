@@ -2,9 +2,6 @@
 using Application.Services;
 using Domain.Entities;
 using Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Application.UseCases;
 
@@ -33,7 +30,7 @@ public class CalculateBMIUseCase(IGetBMI getBMI, IInputRepository inputRepositor
         var input = InputMergeService.MergeInput(existingInput, newInput);
 
         // 4. Save/update Input
-        if (existingInput == null)  input = await _inputRepository.AddAsync(input);
+        if (existingInput == null) input = await _inputRepository.AddAsync(input);
 
         else await _inputRepository.UpdateAsync(input);
 

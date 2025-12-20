@@ -1,15 +1,12 @@
 ﻿using Domain.Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace Application.DTOs;
 
 public class CalculateBMIRequest
 {
     [Required(ErrorMessage = "Weight in pounds is required.")]
-    [Range(1,500, ErrorMessage = "Weight in pounds must be between 1 and 500.")]
+    [Range(1, 500, ErrorMessage = "Weight in pounds must be between 1 and 500.")]
     [Display(Name = "Weight (lbs)")]
     public double WeightLbs { get; set; }
 

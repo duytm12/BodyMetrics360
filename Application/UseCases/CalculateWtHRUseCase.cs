@@ -2,10 +2,6 @@
 using Application.Services;
 using Domain.Entities;
 using Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Domain.Interfaces;
 
 namespace Application.UseCases;
 

@@ -1,7 +1,4 @@
 ﻿using Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Entities;
 
@@ -30,5 +27,5 @@ public class Input
         ActivityLevelEnum.VeryActive => 1.725,
         ActivityLevelEnum.ExtraActive => 1.9,
         _ => throw new ArgumentException("Invalid activity level"),
-    };  
+    };
 }

@@ -1,8 +1,5 @@
 ﻿using Domain.Enums;
 using Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Domain.Services;
 
@@ -10,10 +7,10 @@ public class GetBFP : IGetBFP
 {
     public Task<double> CalculateBFPAsync(double waist, double neck, double height, double hip, GenderEnum gender)
     {
-        if (waist <= 0)    throw new ArgumentException("Waist must be greater than zero.");
-        if (neck <= 0)     throw new ArgumentException("Neck must be greater than zero.");
-        if (height <= 0)   throw new ArgumentException("Height must be greater than zero.");
-        if (hip <= 0)      throw new ArgumentException("Hip must be greater than zero.");
+        if (waist <= 0) throw new ArgumentException("Waist must be greater than zero.");
+        if (neck <= 0) throw new ArgumentException("Neck must be greater than zero.");
+        if (height <= 0) throw new ArgumentException("Height must be greater than zero.");
+        if (hip <= 0) throw new ArgumentException("Hip must be greater than zero.");
 
         double bfp = gender switch
         {
