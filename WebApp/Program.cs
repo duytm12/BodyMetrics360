@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace WebApp
 {
     public class Program
@@ -14,6 +16,12 @@ namespace WebApp
 
             // Add Application layer
             builder.Services.AddApplication();
+
+            // Add DB Context
+            builder.Services.AddDbContext<AppDbContext>(optionBuilder =>
+            {
+                optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DbConnectionString"));
+            });
 
             var app = builder.Build();
 
