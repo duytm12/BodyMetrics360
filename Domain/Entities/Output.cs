@@ -5,6 +5,10 @@ public class Output
     // Save to DB 
     public int Id { get; set; }
     public int InputId { get; set; }
+    
+    // Navigation property
+    public virtual Input Input { get; set; } = null!;
+    
     public DateTime CalculatedAt { get; set; }
 
     // Calculated Metrics

@@ -19,6 +19,9 @@ public class Input
     public GenderEnum Gender { get; set; }
     public ActivityLevelEnum ActivityLevel { get; set; }
 
+    // Navigation property
+    public virtual ICollection<Output> Outputs { get; set; } = new List<Output>();
+
     public double ActivityMultiplier => ActivityLevel switch
     {
         ActivityLevelEnum.Sedentary => 1.2,
