@@ -25,6 +25,13 @@ bld/
 *.userosscache
 *.sln.docstates
 
+## User Secrets and sensitive configuration
+secrets.json
+**/secrets.json
+appsettings.*.json
+!appsettings.json
+!appsettings.Development.json
+
 ## Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -61,4 +68,11 @@ artifacts/
 *.user
 *.userosscache
 *.sln.docstates
+
+## User Secrets and sensitive configuration
+secrets.json
+**/secrets.json
+appsettings.*.json
+!appsettings.json
+!appsettings.Development.json
 
