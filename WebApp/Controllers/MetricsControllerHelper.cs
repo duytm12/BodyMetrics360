@@ -45,6 +45,7 @@ public static class MetricsControllerHelper
             request.HeightInches = input.HeightInches > 0 ? input.HeightInches : 0;
             request.WaistInches = input.WaistInches > 0 ? input.WaistInches : 0;
             request.NeckInches = input.NeckInches > 0 ? input.NeckInches : 0;
+            request.HipInches = input.HipInches > 0 ? input.HipInches : 0;
             request.Gender = input.Gender;
         }
 
@@ -58,6 +59,7 @@ public static class MetricsControllerHelper
         {
             request.WaistInches = input.WaistInches > 0 ? input.WaistInches : 0;
             request.HeightInches = input.HeightInches > 0 ? input.HeightInches : 0;
+            request.Gender = input.Gender;
         }
         return request;
     }

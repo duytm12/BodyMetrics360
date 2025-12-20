@@ -29,7 +29,7 @@ public class CalculateBFPUseCase(IGetBFP getBFP, IInputRepository inputRepositor
         var input = InputMergeService.MergeInput(existingInput, newInput);
 
         // 4. Save/update Input
-        if (existingInput == null) await _inputRepository.AddAsync(input);
+        if (existingInput == null) input = await _inputRepository.AddAsync(input);
 
         else await _inputRepository.UpdateAsync(input);
 
@@ -57,7 +57,7 @@ public class CalculateBFPUseCase(IGetBFP getBFP, IInputRepository inputRepositor
                 CalculatedAt = DateTime.UtcNow,
                 BFP = bfp
             };
-            await _outputRepository.AddAsync(output);
+            output = await _outputRepository.AddAsync(output);
         }
 
         // 8. Return response

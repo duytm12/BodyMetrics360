@@ -17,7 +17,8 @@ public class CalculateWtHRUseCase(IGetWtHR getWtHR, IInputRepository inputReposi
         var newInput = new Input()
         {
             WaistInches = request.WaistInches,
-            HeightInches = request.HeightInches
+            HeightInches = request.HeightInches,
+            Gender = request.Gender
         };
 
         var input = InputMergeService.MergeInput(existingInput, newInput);

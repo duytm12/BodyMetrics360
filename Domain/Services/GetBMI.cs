@@ -23,6 +23,7 @@ public class GetBMI : IGetBMI
         {
             GenderEnum.Male => (4.536 * weight) + (15.88 * height) - (5 * age) + 5,
             GenderEnum.Female => (4.536 * weight) + (15.88 * height) - (5 * age) - 161,
+            _ => throw new ArgumentException("Invalid gender."),
         };
 
         return Task.FromResult(bmr);
