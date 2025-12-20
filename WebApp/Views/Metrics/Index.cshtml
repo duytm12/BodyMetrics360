@@ -1,6 +1,149 @@
-﻿@model Application.DTOs.MetricsSummary
+﻿@model MetricsSummary
 @{
     ViewData["Title"] = "Metrics Dashboard";
 }
 
-<div class="container mt-4"
+<div class="container mt-4">
+    <h1 class="mb-4">Body Metrics Dashboard</h1>
+
+    <div class="row">
+        <!-- BMI Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">BMI (Body Mass Index)</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.BMI.HasValue)
+                    {
+                        <h3 class="text-primary">@Model.BMI.Value.ToString("F2")</h3>
+                        <p class="text-muted mb-0">Calculated</p>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Not calculated yet</p>
+                    }
+                </div>
+                <div class="card-footer">
+                    <a asp-action="CalculateBMI" class="btn btn-primary btn-sm">Calculate BMI</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- BMR Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">BMR (Basal Metabolic Rate)</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.BMR.HasValue)
+                    {
+                        <h3 class="text-info">@Model.BMR.Value.ToString("F2")</h3>
+                        <p class="text-muted mb-0">Calories/day</p>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Not calculated yet</p>
+                    }
+                </div>
+                <div class="card-footer">
+                    <a asp-action="CalculateBMI" class="btn btn-info btn-sm">Calculate BMR</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- TDEE Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">TDEE (Total Daily Energy Expenditure)</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.TDEE.HasValue)
+                    {
+                        <h3 class="text-success">@Model.TDEE.Value.ToString("F2")</h3>
+                        <p class="text-muted mb-0">Calories/day</p>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Not calculated yet</p>4
+                    }
+                </div>
+                <div class="card-footer">
+                    <a asp-action="CalculateBMI" class="btn btn-success btn-sm">Calculate TDEE</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- BFP Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">BFP (Body Fat Percentage)</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.BFP.HasValue)
+                    {
+                        <h3 class="text-warning">@Model.BFP.Value.ToString("F2")%</h3>
+                        <p class="text-muted mb-0">Calculated</p>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Not calculated yet</p>
+                    }
+                </div>
+                <div class="card-footer">
+                    <a asp-action="CalculateBFP" class="btn btn-warning btn-sm">Calculate BFP</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- LBM Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">LBM (Lean Body Mass)</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.LBM.HasValue)
+                    {
+                        <h3 class="text-danger">@Model.LBM.Value.ToString("F2")</h3>
+                        <p class="text-muted mb-0">lbs</p>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Not calculated yet</p>
+                    }
+                </div>
+                <div class="card-footer">
+                    <a asp-action="CalculateLBM" class="btn btn-danger btn-sm">Calculate LBM</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- WtHR Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">WtHR (Waist-to-Height Ratio)</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.WtHR.HasValue)
+                    {
+                        <h3 class="text-secondary">@Model.WtHR.Value.ToString("F3")</h3>
+                        <p class="text-muted mb-0">Ratio</p>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Not calculated yet</p>
+                    }
+                </div>
+                <div class="card-footer">
+                    <a asp-action="CalculateWtHR" class="btn btn-secondary btn-sm">Calculate WtHR</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

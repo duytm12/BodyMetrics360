@@ -1,0 +1,97 @@
+﻿@model CalculateLBMRequest
+@{
+    ViewData["Title"] = "Calculate LBM";
+}
+
+<div class="container mt-4">
+    <h2>Calculate Lean Body Mass (LBM)</h2>
+    <p class="text-muted">Enter your measurements to calculate your Lean Body Mass.</p>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["LBMResult"] != null)
+    {
+        <div class="card mb-4">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">Calculation Result</h5>
+            </div>
+            <div class="card-body">
+                <h3 class="text-danger">@Convert.ToDouble(TempData["LBMResult"]).ToString("F2") lbs</h3>
+                <p class="text-muted">Lean Body Mass</p>
+                <div class="mt-3">
+                    <a asp-action="Index" class="btn btn-danger">View All Metrics</a>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="card">
+        <div class="card-body">
+            <form asp-action="CalculateLBM" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="WeightLbs" class="form-label"></label>
+                        <input asp-for="WeightLbs" class="form-control" />
+                        <span asp-validation-for="WeightLbs" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="HeightInches" class="form-label"></label>
+                        <input asp-for="HeightInches" class="form-control" />
+                        <span asp-validation-for="HeightInches" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="WaistInches" class="form-label"></label>
+                        <input asp-for="WaistInches" class="form-control" />
+                        <span asp-validation-for="WaistInches" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="HipInches" class="form-label"></label>
+                        <input asp-for="HipInches" class="form-control" />
+                        <span asp-validation-for="HipInches" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NeckInches" class="form-label"></label>
+                        <input asp-for="NeckInches" class="form-control" />
+                        <span asp-validation-for="NeckInches" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Gender" class="form-label"></label>
+                        <select asp-for="Gender" class="form-select" asp-items="Html.GetEnumSelectList<GenderEnum>()">
+                            <option value="">-- Select Gender --</option>
+                        </select>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn btn-danger">Calculate</button>
+                    <a asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
