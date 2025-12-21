@@ -47,6 +47,7 @@ jobs:
     - name: Azure Login
       uses: azure/login@v2
       with:
+        auth-type: IDENTITY
         client-id: ${{ secrets.Metrics360WebApp_CLIENT_ID_F2B3 }}
         tenant-id: ${{ secrets.Metrics360WebApp_TENANT_ID_4E8E }}
         subscription-id: ${{ secrets.Metrics360WebApp_SUBSCRIPTION_ID_4E8E }}
