@@ -20,7 +20,7 @@ public class TestSqlRepository
         await using var context = new AppDbContext(options);
         var repo = new SqlServerInputRepository(context);
 
-        var input = new Input { WeightLbs = 70, HeightInches = 175, Age = 30 };
+        var input = new Input { UserId = Guid.NewGuid(), WeightLbs = 70, HeightInches = 175, Age = 30 };
 
         var saved = await repo.AddAsync(input);
 
@@ -29,19 +29,21 @@ public class TestSqlRepository
     }
 
     [Fact]
-    public async Task InputRepository_GetLatest_ReturnsMostRecent()
+    public async Task InputRepository_GetLatestByUserId_ReturnsMostRecentForUser()
     {
         var options = CreateOptions();
         await using var context = new AppDbContext(options);
         var repo = new SqlServerInputRepository(context);
+        var userId = Guid.NewGuid();
 
-        await repo.AddAsync(new Input { WeightLbs = 70, HeightInches = 175, Age = 30, CreatedAt = DateTime.UtcNow.AddMinutes(-5) });
-        await repo.AddAsync(new Input { WeightLbs = 71, HeightInches = 176, Age = 31, CreatedAt = DateTime.UtcNow });
+        await repo.AddAsync(new Input { UserId = userId, WeightLbs = 70, HeightInches = 175, Age = 30, CreatedAt = DateTime.UtcNow.AddMinutes(-5) });
+        await repo.AddAsync(new Input { UserId = userId, WeightLbs = 71, HeightInches = 176, Age = 31, CreatedAt = DateTime.UtcNow });
 
-        var latest = await repo.GetLatestAsync();
+        var latest = await repo.GetLatestByUserIdAsync(userId);
 
         Assert.NotNull(latest);
         Assert.Equal(71, latest!.WeightLbs);
+        Assert.Equal(userId, latest.UserId);
     }
 
     [Fact]
@@ -51,7 +53,7 @@ public class TestSqlRepository
         await using var context = new AppDbContext(options);
         var repo = new SqlServerInputRepository(context);
 
-        var saved = await repo.AddAsync(new Input { WeightLbs = 70, HeightInches = 175, Age = 30 });
+        var saved = await repo.AddAsync(new Input { UserId = Guid.NewGuid(), WeightLbs = 70, HeightInches = 175, Age = 30 });
         saved.WeightLbs = 75;
 
         await repo.UpdateAsync(saved);
@@ -67,7 +69,7 @@ public class TestSqlRepository
         await using var context = new AppDbContext(options);
         var repo = new SqlServerOutputRepository(context);
 
-        var output = new Output { InputId = 1, BMI = 22.5 };
+        var output = new Output { UserId = Guid.NewGuid(), InputId = 1, BMI = 22.5 };
 
         var saved = await repo.AddAsync(output);
 
@@ -82,8 +84,9 @@ public class TestSqlRepository
         await using var context = new AppDbContext(options);
         var repo = new SqlServerOutputRepository(context);
 
-        await repo.AddAsync(new Output { InputId = 1, BMI = 22.5 });
-        await repo.AddAsync(new Output { InputId = 2, BMI = 23.5 });
+        var userId = Guid.NewGuid();
+        await repo.AddAsync(new Output { UserId = userId, InputId = 1, BMI = 22.5 });
+        await repo.AddAsync(new Output { UserId = userId, InputId = 2, BMI = 23.5 });
 
         var result = await repo.GetByInputIdAsync(2);
 
@@ -92,19 +95,21 @@ public class TestSqlRepository
     }
 
     [Fact]
-    public async Task OutputRepository_GetLatest_ReturnsMostRecent()
+    public async Task OutputRepository_GetLatestByUserId_ReturnsMostRecentForUser()
     {
         var options = CreateOptions();
         await using var context = new AppDbContext(options);
         var repo = new SqlServerOutputRepository(context);
+        var userId = Guid.NewGuid();
 
-        await repo.AddAsync(new Output { InputId = 1, BMI = 22.5, CalculatedAt = DateTime.UtcNow.AddMinutes(-3) });
-        await repo.AddAsync(new Output { InputId = 2, BMI = 23.0, CalculatedAt = DateTime.UtcNow });
+        await repo.AddAsync(new Output { UserId = userId, InputId = 1, BMI = 22.5, CalculatedAt = DateTime.UtcNow.AddMinutes(-3) });
+        await repo.AddAsync(new Output { UserId = userId, InputId = 2, BMI = 23.0, CalculatedAt = DateTime.UtcNow });
 
-        var latest = await repo.GetLatestAsync();
+        var latest = await repo.GetLatestByUserIdAsync(userId);
 
         Assert.NotNull(latest);
         Assert.Equal(2, latest!.InputId);
+        Assert.Equal(userId, latest.UserId);
     }
 
     [Fact]
@@ -114,7 +119,7 @@ public class TestSqlRepository
         await using var context = new AppDbContext(options);
         var repo = new SqlServerOutputRepository(context);
 
-        var saved = await repo.AddAsync(new Output { InputId = 1, BMI = 22.5 });
+        var saved = await repo.AddAsync(new Output { UserId = Guid.NewGuid(), InputId = 1, BMI = 22.5 });
         saved.BMI = 24.0;
 
         await repo.UpdateAsync(saved);

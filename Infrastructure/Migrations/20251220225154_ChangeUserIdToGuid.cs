@@ -1,12 +1,11 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class ChangeUserIdToGuid : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,7 +16,7 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     WeightLbs = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     HeightInches = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -40,6 +39,7 @@ namespace Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     InputId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CalculatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     BMI = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
                     BMR = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
@@ -78,6 +78,11 @@ namespace Infrastructure.Migrations
                 name: "IX_UserOutput_InputId",
                 table: "UserOutput",
                 column: "InputId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserOutput_UserId",
+                table: "UserOutput",
+                column: "UserId");
         }
 
         /// <inheritdoc />

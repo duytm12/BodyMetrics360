@@ -56,6 +56,7 @@ namespace TestProject
             var outputRepository = new InMemoryOutputRepository();
             var useCase = new CalculateBMIUseCase(new GetBMI(), inputRepository, outputRepository);
 
+            var testUserId = Guid.NewGuid();
             var response = await useCase.ExecuteAsync(new CalculateBMIRequest
             {
                 WeightLbs = 180,
@@ -63,7 +64,7 @@ namespace TestProject
                 Age = 30,
                 Gender = GenderEnum.Male,
                 ActivityLevel = ActivityLevelEnum.ModeratelyActive
-            });
+            }, testUserId);
 
             Assert.Equal(25.82, response.BMI, 2);
             Assert.Equal(1783.08, response.BMR, 2);
@@ -83,6 +84,7 @@ namespace TestProject
             var outputRepository = new InMemoryOutputRepository();
             var useCase = new CalculateBFPUseCase(new GetBFP(), inputRepository, outputRepository);
 
+            var testUserId = Guid.NewGuid();
             var response = await useCase.ExecuteAsync(new CalculateBFPRequest
             {
                 WaistInches = 34,
@@ -90,7 +92,7 @@ namespace TestProject
                 HeightInches = 70,
                 HipInches = 36,
                 Gender = GenderEnum.Male
-            });
+            }, testUserId);
 
             Assert.Equal(15.49, response.BFP, 2);
             Assert.Equal(response.BFP, outputRepository.LastOutput!.BFP, 3);
@@ -103,6 +105,7 @@ namespace TestProject
             var outputRepository = new InMemoryOutputRepository();
             var useCase = new CalculateLBMUseCase(new GetLBM(), inputRepository, outputRepository);
 
+            var testUserId = Guid.NewGuid();
             var response = await useCase.ExecuteAsync(new CalculateLBMRequest
             {
                 WeightLbs = 160,
@@ -111,7 +114,7 @@ namespace TestProject
                 HipInches = 36,
                 NeckInches = 16,
                 Gender = GenderEnum.Male
-            });
+            }, testUserId);
 
             Assert.Equal(135.21, response.LBM, 2);
             Assert.Equal(response.LBM, outputRepository.LastOutput!.LBM, 3);
@@ -124,11 +127,12 @@ namespace TestProject
             var outputRepository = new InMemoryOutputRepository();
             var useCase = new CalculateWtHRUseCase(new GetWtHR(), inputRepository, outputRepository);
 
+            var testUserId = Guid.NewGuid();
             var response = await useCase.ExecuteAsync(new CalculateWtHRRequest
             {
                 WaistInches = 34,
                 HeightInches = 70
-            });
+            }, testUserId);
 
             Assert.Equal(0.49, response.WtHR, 2);
             Assert.Equal(response.WtHR, outputRepository.LastOutput!.WtHR, 3);
@@ -140,7 +144,7 @@ namespace TestProject
         private int _nextId = 1;
         public Input? LastInput { get; private set; }
 
-        public Task<Input?> GetLatestAsync() => Task.FromResult(LastInput);
+        public Task<Input?> GetLatestByUserIdAsync(Guid userId) => Task.FromResult(LastInput?.UserId == userId ? LastInput : null);
 
         public Task<Input> AddAsync(Input input)
         {
@@ -163,10 +167,7 @@ namespace TestProject
         private readonly Dictionary<int, Output> _outputs = new();
         public Output? LastOutput { get; private set; }
 
-        public Task<Output?> GetLatestAsync()
-        {
-            return Task.FromResult(LastOutput);
-        }
+        public Task<Output?> GetLatestByUserIdAsync(Guid userId) => Task.FromResult(LastOutput?.UserId == userId ? LastOutput : null);
 
         public Task<Output?> GetByInputIdAsync(int inputId)
         {

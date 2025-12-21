@@ -10,14 +10,15 @@ public class CalculateBFPUseCase(IGetBFP getBFP, IInputRepository inputRepositor
     private readonly IGetBFP _getBFP = getBFP;
     private readonly IInputRepository _inputRepository = inputRepository;
     private readonly IOutputRepository _outputRepository = outputRepository;
-    public async Task<CalculateBFPResponse> ExecuteAsync(CalculateBFPRequest request)
+    public async Task<CalculateBFPResponse> ExecuteAsync(CalculateBFPRequest request, Guid userId)
     {
-        // 1. Get latest Input
-        var existingInput = await _inputRepository.GetLatestAsync();
+        // 1. Get latest Input for this user
+        var existingInput = await _inputRepository.GetLatestByUserIdAsync(userId);
 
         // 2. Create new Input from request
         var newInput = new Input()
         {
+            UserId = userId,
             WaistInches = request.WaistInches,
             NeckInches = request.NeckInches,
             HeightInches = request.HeightInches,
@@ -27,6 +28,7 @@ public class CalculateBFPUseCase(IGetBFP getBFP, IInputRepository inputRepositor
 
         // 3. Merge
         var input = InputMergeService.MergeInput(existingInput, newInput);
+        input.UserId = userId; // Ensure userId is set after merge
 
         // 4. Save/update Input
         if (existingInput == null) input = await _inputRepository.AddAsync(input);
@@ -45,6 +47,7 @@ public class CalculateBFPUseCase(IGetBFP getBFP, IInputRepository inputRepositor
         if (existingOutput != null)
         {
             existingOutput.BFP = bfp;
+            existingOutput.UserId = userId; // Ensure userId is set
             await _outputRepository.UpdateAsync(existingOutput);
             output = existingOutput;
 
@@ -54,6 +57,7 @@ public class CalculateBFPUseCase(IGetBFP getBFP, IInputRepository inputRepositor
             output = new Output()
             {
                 InputId = input.Id,
+                UserId = userId,
                 CalculatedAt = DateTime.UtcNow,
                 BFP = bfp
             };

@@ -20,9 +20,12 @@ public class InMemoryInputRepository : IInputRepository
         return Task.FromResult(input);
     }
 
-    public Task<Input?> GetLatestAsync()
+    public Task<Input?> GetLatestByUserIdAsync(Guid userId)
     {
-        var input = _inputs.Values.OrderByDescending(i => i.CreatedAt).FirstOrDefault();
+        var input = _inputs.Values
+            .Where(i => i.UserId == userId)
+            .OrderByDescending(i => i.CreatedAt)
+            .FirstOrDefault();
         return Task.FromResult<Input?>(input);
     }
 

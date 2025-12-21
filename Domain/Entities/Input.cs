@@ -6,7 +6,7 @@ public class Input
 {
     // Save to DB 
     public int Id { get; set; }
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
     public DateTime CreatedAt { get; set; }
 
     // Input data to calculate Metrics

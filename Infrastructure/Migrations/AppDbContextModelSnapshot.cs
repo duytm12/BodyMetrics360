@@ -53,8 +53,8 @@ namespace Infrastructure.Migrations
                     b.Property<decimal>("NeckInches")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("WaistInches")
                         .HasColumnType("decimal(18,2)");
@@ -104,6 +104,9 @@ namespace Infrastructure.Migrations
                     b.Property<decimal>("TDEE")
                         .HasColumnType("decimal(18,4)");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<decimal>("WtHR")
                         .HasColumnType("decimal(18,4)");
 
@@ -114,6 +117,9 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("InputId")
                         .HasDatabaseName("IX_UserOutput_InputId");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("IX_UserOutput_UserId");
 
                     b.ToTable("UserOutput", (string)null);
                 });

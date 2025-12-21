@@ -19,9 +19,10 @@ public class SqlServerInputRepository(AppDbContext context) : IInputRepository
         return input;
     }
 
-    public async Task<Input?> GetLatestAsync()
+    public async Task<Input?> GetLatestByUserIdAsync(Guid userId)
     {
         return await _context.Inputs
+            .Where(i => i.UserId == userId)
             .OrderByDescending(i => i.CreatedAt)
             .FirstOrDefaultAsync();
     }

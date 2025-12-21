@@ -1,7 +1,4 @@
-﻿using Application.DTOs;
-using Domain.Entities;
-using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata.Ecma335;
+﻿using Domain.Entities;
 
 namespace WebApp.Controllers;
 

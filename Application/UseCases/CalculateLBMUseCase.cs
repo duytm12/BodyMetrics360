@@ -11,11 +11,12 @@ public class CalculateLBMUseCase(IGetLBM getLBM, IInputRepository inputRepositor
     private readonly IInputRepository _inputRepository = inputRepository;
     private readonly IOutputRepository _outputRepository = outputRepository;
 
-    public async Task<CalculateLBMResponse> ExecuteAsync(CalculateLBMRequest request)
+    public async Task<CalculateLBMResponse> ExecuteAsync(CalculateLBMRequest request, Guid userId)
     {
-        var existingInput = await _inputRepository.GetLatestAsync();
+        var existingInput = await _inputRepository.GetLatestByUserIdAsync(userId);
         var newInput = new Input()
         {
+            UserId = userId,
             WeightLbs = request.WeightLbs,
             HeightInches = request.HeightInches,
             WaistInches = request.WaistInches,
@@ -25,6 +26,7 @@ public class CalculateLBMUseCase(IGetLBM getLBM, IInputRepository inputRepositor
         };
 
         var input = InputMergeService.MergeInput(existingInput, newInput);
+        input.UserId = userId; // Ensure userId is set after merge
 
         if (existingInput == null) input = await _inputRepository.AddAsync(input);
         else await _inputRepository.UpdateAsync(input);
@@ -37,6 +39,7 @@ public class CalculateLBMUseCase(IGetLBM getLBM, IInputRepository inputRepositor
         if (existingOutput != null)
         {
             existingOutput.LBM = lbm;
+            existingOutput.UserId = userId; // Ensure userId is set
             await _outputRepository.UpdateAsync(existingOutput);
             output = existingOutput;
         }
@@ -45,6 +48,7 @@ public class CalculateLBMUseCase(IGetLBM getLBM, IInputRepository inputRepositor
             output = new Output()
             {
                 InputId = input.Id,
+                UserId = userId,
                 LBM = lbm
             };
             output = await _outputRepository.AddAsync(output);

@@ -1,5 +1,5 @@
-﻿global using Domain.Enums;
+﻿global using Application;
 global using Application.DTOs;
-global using Application;
+global using Domain.Enums;
 global using Infrastructure;
 global using Infrastructure.SQLServer;

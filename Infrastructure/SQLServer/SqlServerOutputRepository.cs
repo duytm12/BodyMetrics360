@@ -25,9 +25,10 @@ public class SqlServerOutputRepository(AppDbContext context) : IOutputRepository
             .FirstOrDefaultAsync(o => o.InputId == inputId);
     }
 
-    public async Task<Output?> GetLatestAsync()
+    public async Task<Output?> GetLatestByUserIdAsync(Guid userId)
     {
         return await _context.Outputs
+            .Where(o => o.UserId == userId)
             .OrderByDescending(o => o.CalculatedAt)
             .FirstOrDefaultAsync();
     }

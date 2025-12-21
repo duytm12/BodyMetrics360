@@ -1,5 +1,6 @@
-﻿using Domain.Interfaces;
-using Infrastructure.InMemory;
+﻿using Application.Interfaces;
+using Domain.Interfaces;
+using Infrastructure.Services;
 using Infrastructure.SQLServer;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +13,9 @@ public static class DI
         // Register EF Core Repositories (Scoped lifetime for DbContext)
         services.AddScoped<IInputRepository, SqlServerInputRepository>();
         services.AddScoped<IOutputRepository, SqlServerOutputRepository>();
+
+        // Register Session User Service
+        services.AddScoped<ISessionUserService, SessionUserService>();
 
         // Keep InMemory repositories for testing if needed
         // services.AddSingleton<IInputRepository, InMemoryInputRepository>();

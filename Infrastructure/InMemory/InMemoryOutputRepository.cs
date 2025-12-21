@@ -36,9 +36,12 @@ public class InMemoryOutputRepository : IOutputRepository
         return Task.FromResult<Output?>(null);
     }
 
-    public Task<Output?> GetLatestAsync()
+    public Task<Output?> GetLatestByUserIdAsync(Guid userId)
     {
-        var output = _outputs.Values.OrderByDescending(o => o.CalculatedAt).FirstOrDefault();
+        var output = _outputs.Values
+            .Where(o => o.UserId == userId)
+            .OrderByDescending(o => o.CalculatedAt)
+            .FirstOrDefault();
         return Task.FromResult(output);
     }
 

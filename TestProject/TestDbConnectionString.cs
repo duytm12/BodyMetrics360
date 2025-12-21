@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.EnvironmentVariables;
 
 namespace TestProject;
 
@@ -40,7 +39,7 @@ public class TestDbConnectionString
         // Assert - Verify connection string is configured
         Assert.NotNull(connectionString);
         Assert.NotEmpty(connectionString);
-        
+
         // Verify it contains expected SQL Server connection string parts
         Assert.Contains("Data Source", connectionString);
         Assert.Contains("Initial Catalog", connectionString);
@@ -62,7 +61,7 @@ public class TestDbConnectionString
 
         // Assert - Should be null or empty (since we removed it from appsettings.json)
         // This verifies that the connection string is NOT stored in appsettings.json
-        Assert.True(string.IsNullOrEmpty(connectionString), 
+        Assert.True(string.IsNullOrEmpty(connectionString),
             "Connection string should not be in appsettings.json for security");
     }
 
@@ -102,7 +101,7 @@ public class TestDbConnectionString
         // Assert - User secrets should provide the value (not the empty one from appsettings.json)
         Assert.NotNull(connectionString);
         Assert.NotEmpty(connectionString);
-        
+
         // Verify it's a valid SQL Server connection string
         Assert.Contains("Data Source", connectionString);
         Assert.Contains("Initial Catalog", connectionString);

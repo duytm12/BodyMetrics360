@@ -11,14 +11,15 @@ public class CalculateBMIUseCase(IGetBMI getBMI, IInputRepository inputRepositor
     private readonly IInputRepository _inputRepository = inputRepository;
     private readonly IOutputRepository _outputRepository = outputRepository;
 
-    public async Task<CalculateBMIResponse> ExecuteAsync(CalculateBMIRequest request)
+    public async Task<CalculateBMIResponse> ExecuteAsync(CalculateBMIRequest request, Guid userId)
     {
-        // 1. Get latest Input
-        var existingInput = await _inputRepository.GetLatestAsync();
+        // 1. Get latest Input for this user
+        var existingInput = await _inputRepository.GetLatestByUserIdAsync(userId);
 
         // 2. Create new Input from request
         var newInput = new Input
         {
+            UserId = userId,
             WeightLbs = request.WeightLbs,
             HeightInches = request.HeightInches,
             Age = request.Age,
@@ -28,6 +29,7 @@ public class CalculateBMIUseCase(IGetBMI getBMI, IInputRepository inputRepositor
 
         // 3. Merge Inputs
         var input = InputMergeService.MergeInput(existingInput, newInput);
+        input.UserId = userId; // Ensure userId is set after merge
 
         // 4. Save/update Input
         if (existingInput == null) input = await _inputRepository.AddAsync(input);
@@ -49,6 +51,7 @@ public class CalculateBMIUseCase(IGetBMI getBMI, IInputRepository inputRepositor
             existingOutput.BMI = bmi;
             existingOutput.BMR = bmr;
             existingOutput.TDEE = tdee;
+            existingOutput.UserId = userId; // Ensure userId is set
             await _outputRepository.UpdateAsync(existingOutput);
             output = existingOutput;
         }
@@ -57,6 +60,7 @@ public class CalculateBMIUseCase(IGetBMI getBMI, IInputRepository inputRepositor
             output = new Output
             {
                 InputId = input.Id,
+                UserId = userId,
                 BMI = bmi,
                 BMR = bmr,
                 TDEE = tdee

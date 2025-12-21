@@ -1,4 +1,4 @@
-﻿using Application.DTOs;
+﻿using Application.Interfaces;
 using Application.UseCases;
 using Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +8,8 @@ namespace WebApp.Controllers
     public class MetricsController(
         IOutputRepository outputRepository, IInputRepository inputRepository,
         CalculateBMIUseCase calculateBMIUseCase, CalculateBFPUseCase calculateBFPUseCase,
-        CalculateLBMUseCase calculateLBMUseCase, CalculateWtHRUseCase calculateWtHRUseCase) : Controller
+        CalculateLBMUseCase calculateLBMUseCase, CalculateWtHRUseCase calculateWtHRUseCase,
+        ISessionUserService sessionUserService) : Controller
     {
         private readonly IOutputRepository _outputRepository = outputRepository;
         private readonly IInputRepository _inputRepository = inputRepository;
@@ -16,11 +17,13 @@ namespace WebApp.Controllers
         private readonly CalculateBFPUseCase _calculateBFPUseCase = calculateBFPUseCase;
         private readonly CalculateLBMUseCase _calculateLBMUseCase = calculateLBMUseCase;
         private readonly CalculateWtHRUseCase _calculateWtHRUseCase = calculateWtHRUseCase;
+        private readonly ISessionUserService _sessionUserService = sessionUserService;
 
 
         public async Task<IActionResult> Index()
         {
-            var latestOutput = await _outputRepository.GetLatestAsync();
+            var userId = _sessionUserService.GetCurrentUserId();
+            var latestOutput = await _outputRepository.GetLatestByUserIdAsync(userId);
 
             var summary = new MetricsSummary
             {
@@ -37,7 +40,8 @@ namespace WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> CalculateBMI()
         {
-            var latestInput = await _inputRepository.GetLatestAsync();
+            var userId = _sessionUserService.GetCurrentUserId();
+            var latestInput = await _inputRepository.GetLatestByUserIdAsync(userId);
             var request = MetricsControllerHelper.MapToBMIRequest(latestInput);
             return View(request);
         }
@@ -53,7 +57,8 @@ namespace WebApp.Controllers
 
             try
             {
-                var response = await _calculateBMIUseCase.ExecuteAsync(request);
+                var userId = _sessionUserService.GetCurrentUserId();
+                var response = await _calculateBMIUseCase.ExecuteAsync(request, userId);
                 TempData["BMIResult"] = response.BMI;
                 TempData["BMRResult"] = response.BMR;
                 TempData["TDEEResult"] = response.TDEE;
@@ -71,7 +76,8 @@ namespace WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> CalculateBFP()
         {
-            var latestInput = await _inputRepository.GetLatestAsync();
+            var userId = _sessionUserService.GetCurrentUserId();
+            var latestInput = await _inputRepository.GetLatestByUserIdAsync(userId);
             var request = MetricsControllerHelper.MapToBFPRequest(latestInput);
             return View(request);
         }
@@ -87,7 +93,8 @@ namespace WebApp.Controllers
 
             try
             {
-                var response = await _calculateBFPUseCase.ExecuteAsync(request);
+                var userId = _sessionUserService.GetCurrentUserId();
+                var response = await _calculateBFPUseCase.ExecuteAsync(request, userId);
                 TempData["BFPResult"] = response.BFP;
                 TempData["SuccessMessage"] = "BFP calculated successfully!";
                 return View(request);
@@ -102,7 +109,8 @@ namespace WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> CalculateLBM()
         {
-            var latestInput = await _inputRepository.GetLatestAsync();
+            var userId = _sessionUserService.GetCurrentUserId();
+            var latestInput = await _inputRepository.GetLatestByUserIdAsync(userId);
             var request = MetricsControllerHelper.MapToLBMRequest(latestInput);
             return View(request);
         }
@@ -119,7 +127,8 @@ namespace WebApp.Controllers
 
             try
             {
-                var response = await _calculateLBMUseCase.ExecuteAsync(request);
+                var userId = _sessionUserService.GetCurrentUserId();
+                var response = await _calculateLBMUseCase.ExecuteAsync(request, userId);
                 TempData["LBMResult"] = response.LBM;
                 TempData["SuccessMessage"] = "LBM calculated successfully!";
                 return View(request);
@@ -135,7 +144,8 @@ namespace WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> CalculateWtHR()
         {
-            var latestInput = await _inputRepository.GetLatestAsync();
+            var userId = _sessionUserService.GetCurrentUserId();
+            var latestInput = await _inputRepository.GetLatestByUserIdAsync(userId);
             var request = MetricsControllerHelper.MapToWtHRRequest(latestInput);
             return View(request);
         }
@@ -152,7 +162,8 @@ namespace WebApp.Controllers
 
             try
             {
-                var response = await _calculateWtHRUseCase.ExecuteAsync(request);
+                var userId = _sessionUserService.GetCurrentUserId();
+                var response = await _calculateWtHRUseCase.ExecuteAsync(request, userId);
                 TempData["WtHRResult"] = response.WtHR;
                 TempData["SuccessMessage"] = "WtHR calculated successfully!";
                 return View(request);

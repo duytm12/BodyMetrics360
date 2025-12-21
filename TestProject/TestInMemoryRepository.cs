@@ -8,25 +8,27 @@ public class TestInMemoryRepository
     public async Task InputRepository_AddAsync_AssignsIdAndCreatedAt()
     {
         var repository = new InMemoryInputRepository();
-        var input = new Input { WeightLbs = 150 };
+        var userId = Guid.NewGuid();
+        var input = new Input { UserId = userId, WeightLbs = 150 };
 
         var stored = await repository.AddAsync(input);
 
         Assert.Equal(1, stored.Id);
         Assert.NotEqual(default, stored.CreatedAt);
-        var latest = await repository.GetLatestAsync();
+        var latest = await repository.GetLatestByUserIdAsync(userId);
         Assert.Equal(stored.Id, latest!.Id);
     }
 
     [Fact]
-    public async Task InputRepository_GetLatestAsync_ReturnsMostRecent()
+    public async Task InputRepository_GetLatestByUserId_ReturnsMostRecent()
     {
         var repository = new InMemoryInputRepository();
-        var first = await repository.AddAsync(new Input { WeightLbs = 150 });
+        var userId = Guid.NewGuid();
+        var first = await repository.AddAsync(new Input { UserId = userId, WeightLbs = 150 });
         await Task.Delay(10);
-        var second = await repository.AddAsync(new Input { WeightLbs = 160 });
+        var second = await repository.AddAsync(new Input { UserId = userId, WeightLbs = 160 });
 
-        var latest = await repository.GetLatestAsync();
+        var latest = await repository.GetLatestByUserIdAsync(userId);
 
         Assert.Equal(second.Id, latest!.Id);
         Assert.True(latest!.CreatedAt >= first.CreatedAt);
@@ -36,12 +38,13 @@ public class TestInMemoryRepository
     public async Task InputRepository_UpdateAsync_UpdatesStoredInput()
     {
         var repository = new InMemoryInputRepository();
-        var stored = await repository.AddAsync(new Input { WeightLbs = 150, WaistInches = 32 });
+        var userId = Guid.NewGuid();
+        var stored = await repository.AddAsync(new Input { UserId = userId, WeightLbs = 150, WaistInches = 32 });
 
         stored.WaistInches = 34;
         await repository.UpdateAsync(stored);
 
-        var latest = await repository.GetLatestAsync();
+        var latest = await repository.GetLatestByUserIdAsync(userId);
         Assert.Equal(34, latest!.WaistInches);
         Assert.Equal(stored.Id, latest.Id);
     }
@@ -62,14 +65,15 @@ public class TestInMemoryRepository
     }
 
     [Fact]
-    public async Task OutputRepository_GetLatestAsync_ReturnsMostRecent()
+    public async Task OutputRepository_GetLatestByUserId_ReturnsMostRecent()
     {
         var repository = new InMemoryOutputRepository();
-        var first = await repository.AddAsync(new Output { InputId = 1, BMI = 20 });
+        var userId = Guid.NewGuid();
+        var first = await repository.AddAsync(new Output { UserId = userId, InputId = 1, BMI = 20 });
         await Task.Delay(10);
-        var second = await repository.AddAsync(new Output { InputId = 2, BMI = 22 });
+        var second = await repository.AddAsync(new Output { UserId = userId, InputId = 2, BMI = 22 });
 
-        var latest = await repository.GetLatestAsync();
+        var latest = await repository.GetLatestByUserIdAsync(userId);
 
         Assert.Equal(second.Id, latest!.Id);
         Assert.True(latest.CalculatedAt >= first.CalculatedAt);

@@ -11,6 +11,19 @@ namespace WebApp
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            // Add session support
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+                options.Cookie.SameSite = SameSiteMode.Lax;
+            });
+
+            // Add HttpContextAccessor for session access
+            builder.Services.AddHttpContextAccessor();
+
             // Add Infrastructure layer
             builder.Services.AddInfrastructure();
 
@@ -35,6 +48,9 @@ namespace WebApp
 
             app.UseHttpsRedirection();
             app.UseRouting();
+
+            // Use session middleware (must be before UseAuthorization)
+            app.UseSession();
 
             app.UseAuthorization();
 

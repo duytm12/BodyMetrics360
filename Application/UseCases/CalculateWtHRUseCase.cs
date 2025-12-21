@@ -11,17 +11,19 @@ public class CalculateWtHRUseCase(IGetWtHR getWtHR, IInputRepository inputReposi
     private readonly IInputRepository _inputRepository = inputRepository;
     private readonly IOutputRepository _outputRepository = outputRepository;
 
-    public async Task<CalculateWtHRResponse> ExecuteAsync(CalculateWtHRRequest request)
+    public async Task<CalculateWtHRResponse> ExecuteAsync(CalculateWtHRRequest request, Guid userId)
     {
-        var existingInput = await _inputRepository.GetLatestAsync();
+        var existingInput = await _inputRepository.GetLatestByUserIdAsync(userId);
         var newInput = new Input()
         {
+            UserId = userId,
             WaistInches = request.WaistInches,
             HeightInches = request.HeightInches,
             Gender = request.Gender
         };
 
         var input = InputMergeService.MergeInput(existingInput, newInput);
+        input.UserId = userId; // Ensure userId is set after merge
         if (existingInput == null) input = await _inputRepository.AddAsync(input);
         else await _inputRepository.UpdateAsync(input);
 
@@ -32,6 +34,7 @@ public class CalculateWtHRUseCase(IGetWtHR getWtHR, IInputRepository inputReposi
         if (existingOutput != null)
         {
             existingOutput.WtHR = wtHR;
+            existingOutput.UserId = userId; // Ensure userId is set
             await _outputRepository.UpdateAsync(existingOutput);
             output = existingOutput;
         }
@@ -40,6 +43,7 @@ public class CalculateWtHRUseCase(IGetWtHR getWtHR, IInputRepository inputReposi
             output = new Output()
             {
                 InputId = input.Id,
+                UserId = userId,
                 WtHR = wtHR
             };
             output = await _outputRepository.AddAsync(output);

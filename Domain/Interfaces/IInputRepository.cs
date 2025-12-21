@@ -4,7 +4,7 @@ namespace Domain.Interfaces;
 
 public interface IInputRepository
 {
-    Task<Input?> GetLatestAsync();
+    Task<Input?> GetLatestByUserIdAsync(Guid userId);
     Task<Input> AddAsync(Input input);
     Task UpdateAsync(Input input);
 }
