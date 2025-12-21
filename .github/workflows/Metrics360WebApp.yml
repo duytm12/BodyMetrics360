@@ -46,9 +46,9 @@ jobs:
     - name: Azure Login
       uses: azure/login@v2
       with:
-        client-id: ${{ vars.Metrics360WebApp_CLIENT_ID_F2B3 }}
-        tenant-id: ${{ vars.Metrics360WebApp_TENANT_ID_4E8E }}
-        subscription-id: ${{ vars.Metrics360WebApp_SUBSCRIPTION_ID_4E8E }}
+        client-id: ${{ secrets.Metrics360WebApp_CLIENT_ID_F2B3 }}
+        tenant-id: ${{ secrets.Metrics360WebApp_TENANT_ID_4E8E }}
+        subscription-id: ${{ secrets.Metrics360WebApp_SUBSCRIPTION_ID_4E8E }}
     - name: Deploy to Azure WebApp
       uses: azure/webapps-deploy@v2
       with:
