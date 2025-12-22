@@ -25,6 +25,14 @@
                 <h3 class="text-danger">@Convert.ToDouble(TempData["LBMResult"]).ToString("F2") lbs</h3>
                 <p class="text-muted">Lean Body Mass</p>
 
+                <hr />
+                <div class="mt-4">
+                    <h5>LBM Reference Chart</h5>
+                    <div class="chart-container" style="position: relative; height: 350px;">
+                        <canvas id="lbmChart"></canvas>
+                    </div>
+                </div>
+
                 @if (TempData["LbmRecCategory"] != null)
                 {
                     <hr />
@@ -101,6 +109,97 @@
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    @if (TempData["LBMResult"] != null)
+    {
+        <script>
+            const lbmValue = @Convert.ToDouble(TempData["LBMResult"]);
+            const lbmPercentage = @Convert.ToDouble(TempData["LBMPercentage"]);
+            const userGender = '@TempData["Gender"]';
+            const ctx = document.getElementById('lbmChart');
+            
+            // LBM percentage ranges: [Below Average Max, Average Max, Fitness Max, Athletes Max]
+            const menRanges = [69, 76, 81, 91];
+            const womenRanges = [61, 68, 73, 85];
+            
+            // Determine user's category based on percentage
+            let userCategoryIndex = 0;
+            if (userGender === 'Male') {
+                if (lbmPercentage < 69) userCategoryIndex = 0;
+                else if (lbmPercentage < 76) userCategoryIndex = 1;
+                else if (lbmPercentage < 81) userCategoryIndex = 2;
+                else userCategoryIndex = 3;
+            } else {
+                if (lbmPercentage < 61) userCategoryIndex = 0;
+                else if (lbmPercentage < 68) userCategoryIndex = 1;
+                else if (lbmPercentage < 73) userCategoryIndex = 2;
+                else userCategoryIndex = 3;
+            }
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Below Average', 'Acceptable / Average', 'Fitness Enthusiasts', 'Athletes'],
+                    datasets: [{
+                        label: 'Men (%)',
+                        data: menRanges,
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Women (%)',
+                        data: womenRanges,
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Your LBM: ' + lbmPercentage.toFixed(1) + '% (' + lbmValue.toFixed(2) + ' lbs)',
+                        data: Array(4).fill(null).map((_, i) => i === userCategoryIndex ? lbmPercentage : null),
+                        type: 'line',
+                        borderColor: 'rgba(255, 0, 0, 1)',
+                        borderWidth: 3,
+                        pointRadius: 10,
+                        pointBackgroundColor: 'rgba(255, 0, 0, 1)',
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Lean Body Mass (%)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    if (context.datasetIndex === 0) {
+                                        const ranges = ['< 69%', '69-76%', '76-81%', '81-91%'];
+                                        return 'Men: ' + ranges[context.dataIndex];
+                                    } else if (context.datasetIndex === 1) {
+                                        const ranges = ['< 61%', '61-68%', '68-73%', '73-85%'];
+                                        return 'Women: ' + ranges[context.dataIndex];
+                                    }
+                                    return 'Your LBM: ' + lbmPercentage.toFixed(1) + '% (' + lbmValue.toFixed(2) + ' lbs)';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
     }
 }
 

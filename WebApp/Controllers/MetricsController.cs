@@ -202,6 +202,7 @@ namespace WebApp.Controllers
                 var bfpReco = await _getRecommendation.GetBfpRecommendation(response.BFP, request.Gender);
                 TempData["BfpRecCategory"] = bfpReco.GetValueOrDefault("Category");
                 TempData["BfpRecText"] = bfpReco.GetValueOrDefault("Recommendation");
+                TempData["Gender"] = request.Gender.ToString();
 
                 // Persist recommendation snapshot for this user (BFP-focused, upsert)
                 var existing = await _recommendationRepository.GetByUserIdAsync(userId);
@@ -251,11 +252,16 @@ namespace WebApp.Controllers
                 var userId = _sessionUserService.GetCurrentUserId();
                 var response = await _calculateLBMUseCase.ExecuteAsync(request, userId);
                 TempData["LBMResult"] = response.LBM;
+                
+                // Calculate LBM percentage for chart
+                var lbmPercentage = request.WeightLbs > 0 ? (response.LBM / request.WeightLbs) * 100 : 0;
+                TempData["LBMPercentage"] = lbmPercentage;
 
                 // Recommendation for LBM
                 var lbmReco = await _getRecommendation.GetLbmRecommendation(response.LBM, request.Gender);
                 TempData["LbmRecCategory"] = lbmReco.GetValueOrDefault("Category");
                 TempData["LbmRecText"] = lbmReco.GetValueOrDefault("Recommendation");
+                TempData["Gender"] = request.Gender.ToString();
 
                 // Persist recommendation snapshot for this user (LBM-focused, upsert)
                 var existing = await _recommendationRepository.GetByUserIdAsync(userId);
