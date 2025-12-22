@@ -24,6 +24,15 @@
             <div class="card-body">
                 <h3 class="text-secondary">@Convert.ToDouble(TempData["WtHRResult"]).ToString("F3")</h3>
                 <p class="text-muted">Waist-to-Height Ratio</p>
+
+                @if (TempData["WtHrRecCategory"] != null)
+                {
+                    <hr />
+                    <h5>WtHR Recommendation</h5>
+                    <p class="mb-1"><strong>Category:</strong> @TempData["WtHrRecCategory"]</p>
+                    <p class="mb-3"><strong>Recommendation:</strong> @TempData["WtHrRecText"]</p>
+                }
+
                 <div class="mt-3">
                     <a asp-action="Index" class="btn btn-secondary">View All Metrics</a>
                 </div>

@@ -13,6 +13,7 @@ public static class DI
         services.AddScoped<IGetBFP, GetBFP>();
         services.AddScoped<IGetLBM, GetLBM>();
         services.AddScoped<IGetWtHR, GetWtHR>();
+        services.AddScoped<IGetRecommendation, GetRecommendation>();
 
         // Register Application Use Cases
         services.AddScoped<UseCases.CalculateBMIUseCase>();

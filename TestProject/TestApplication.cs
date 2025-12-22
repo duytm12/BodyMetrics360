@@ -137,6 +137,127 @@ namespace TestProject
             Assert.Equal(0.49, response.WtHR, 2);
             Assert.Equal(response.WtHR, outputRepository.LastOutput!.WtHR, 3);
         }
+
+        [Fact]
+        public async Task RecommendationRepository_UpsertAsync_CreatesNew_WhenNotExists()
+        {
+            var recommendationRepository = new InMemoryRecommendationRepository();
+            var userId = Guid.NewGuid();
+
+            var recommendation = new Recommendation
+            {
+                UserId = userId,
+                BmiRecommendation = "Test BMI recommendation",
+                BmrRecommendation = "Test BMR recommendation",
+                TdeeRecommendation = "Test TDEE recommendation",
+                BfpRecommendation = string.Empty,
+                LbmRecommendation = string.Empty,
+                WtHrRecommendation = string.Empty
+            };
+
+            var result = await recommendationRepository.UpsertAsync(recommendation);
+
+            Assert.NotNull(result);
+            Assert.Equal(userId, result.UserId);
+            Assert.Equal("Test BMI recommendation", result.BmiRecommendation);
+            var retrieved = await recommendationRepository.GetByUserIdAsync(userId);
+            Assert.NotNull(retrieved);
+            Assert.Equal(result.Id, retrieved!.Id);
+        }
+
+        [Fact]
+        public async Task RecommendationRepository_UpsertAsync_UpdatesExisting_WhenExists()
+        {
+            var recommendationRepository = new InMemoryRecommendationRepository();
+            var userId = Guid.NewGuid();
+
+            var initial = new Recommendation
+            {
+                UserId = userId,
+                BmiRecommendation = "Initial BMI",
+                BmrRecommendation = "Initial BMR",
+                TdeeRecommendation = "Initial TDEE",
+                BfpRecommendation = string.Empty,
+                LbmRecommendation = string.Empty,
+                WtHrRecommendation = string.Empty
+            };
+
+            var created = await recommendationRepository.AddAsync(initial);
+            var initialId = created.Id;
+
+            var updated = new Recommendation
+            {
+                UserId = userId,
+                BmiRecommendation = "Updated BMI",
+                BmrRecommendation = "Updated BMR",
+                TdeeRecommendation = "Updated TDEE",
+                BfpRecommendation = "Updated BFP",
+                LbmRecommendation = string.Empty,
+                WtHrRecommendation = string.Empty
+            };
+
+            var result = await recommendationRepository.UpsertAsync(updated);
+
+            Assert.Equal(initialId, result.Id); // Same ID
+            Assert.Equal("Updated BMI", result.BmiRecommendation);
+            Assert.Equal("Updated BMR", result.BmrRecommendation);
+            Assert.Equal("Updated TDEE", result.TdeeRecommendation);
+            Assert.Equal("Updated BFP", result.BfpRecommendation);
+
+            var retrieved = await recommendationRepository.GetByUserIdAsync(userId);
+            Assert.NotNull(retrieved);
+            Assert.Equal("Updated BMI", retrieved!.BmiRecommendation);
+        }
+
+        [Fact]
+        public async Task RecommendationRepository_GetByUserIdAsync_ReturnsNull_WhenNotExists()
+        {
+            var recommendationRepository = new InMemoryRecommendationRepository();
+            var userId = Guid.NewGuid();
+
+            var result = await recommendationRepository.GetByUserIdAsync(userId);
+
+            Assert.Null(result);
+        }
+    }
+
+    internal class InMemoryRecommendationRepository : IRecommendationRepository
+    {
+        private int _nextId = 1;
+        private readonly Dictionary<Guid, Recommendation> _recommendations = new();
+
+        public Task<Recommendation> AddAsync(Recommendation recommendation)
+        {
+            recommendation.Id = _nextId++;
+            _recommendations[recommendation.UserId] = recommendation;
+            return Task.FromResult(recommendation);
+        }
+
+        public Task<Recommendation?> GetByUserIdAsync(Guid userId)
+        {
+            _recommendations.TryGetValue(userId, out var recommendation);
+            return Task.FromResult(recommendation);
+        }
+
+        public async Task<Recommendation> UpsertAsync(Recommendation recommendation)
+        {
+            var existing = await GetByUserIdAsync(recommendation.UserId);
+
+            if (existing != null)
+            {
+                existing.BmiRecommendation = recommendation.BmiRecommendation;
+                existing.BmrRecommendation = recommendation.BmrRecommendation;
+                existing.TdeeRecommendation = recommendation.TdeeRecommendation;
+                existing.BfpRecommendation = recommendation.BfpRecommendation;
+                existing.LbmRecommendation = recommendation.LbmRecommendation;
+                existing.WtHrRecommendation = recommendation.WtHrRecommendation;
+                return existing;
+            }
+            else
+            {
+                return await AddAsync(recommendation);
+            }
+        }
     }
 
     internal class InMemoryInputRepository : IInputRepository

@@ -47,6 +47,31 @@
                         </div>
                     }
                 </div>
+
+                @if (TempData["BmiRecCategory"] != null || TempData["BmrRecText"] != null || TempData["TdeeRecCategory"] != null)
+                {
+                    <hr />
+                    <div class="mt-3">
+                        @if (TempData["BmiRecCategory"] != null)
+                        {
+                            <h5>BMI Recommendation</h5>
+                            <p class="mb-1"><strong>Category:</strong> @TempData["BmiRecCategory"]</p>
+                            <p class="mb-3"><strong>Recommendation:</strong> @TempData["BmiRecText"]</p>
+                        }
+                        @if (TempData["BmrRecText"] != null)
+                        {
+                            <h5>BMR Recommendation</h5>
+                            <p class="mb-3"><strong>Recommendation:</strong> @TempData["BmrRecText"]</p>
+                        }
+                        @if (TempData["TdeeRecCategory"] != null)
+                        {
+                            <h5>TDEE Recommendation</h5>
+                            <p class="mb-1"><strong>Summary:</strong> @TempData["TdeeRecCategory"]</p>
+                            <p class="mb-0"><strong>Recommendation:</strong> @TempData["TdeeRecText"]</p>
+                        }
+                    </div>
+                }
+
                 <div class="mt-3">
                     <a asp-action="Index" class="btn btn-primary">View All Metrics</a>
                 </div>

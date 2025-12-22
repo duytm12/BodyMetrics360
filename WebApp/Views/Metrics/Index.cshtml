@@ -18,6 +18,12 @@
                     {
                         <h3 class="text-primary">@Model.BMI.Value.ToString("F2")</h3>
                         <p class="text-muted mb-0">Calculated</p>
+                        @if (Model.BmiRecommendation != null)
+                        {
+                            <hr />
+                            <p class="mb-1"><strong>Category:</strong> @Model.BmiRecommendation.Category</p>
+                            <p class="mb-0"><strong>Recommendation:</strong> @Model.BmiRecommendation.Recommendation</p>
+                        }
                     }
                     else
                     {
@@ -41,6 +47,11 @@
                     {
                         <h3 class="text-info">@Model.BMR.Value.ToString("F2")</h3>
                         <p class="text-muted mb-0">Calories/day</p>
+                        @if (Model.BmrRecommendation != null)
+                        {
+                            <hr />
+                            <p class="mb-0"><strong>Summary:</strong> @Model.BmrRecommendation.Recommendation</p>
+                        }
                     }
                     else
                     {
@@ -64,6 +75,12 @@
                     {
                         <h3 class="text-success">@Model.TDEE.Value.ToString("F2")</h3>
                         <p class="text-muted mb-0">Calories/day</p>
+                        @if (Model.TdeeRecommendation != null)
+                        {
+                            <hr />
+                            <p class="mb-1"><strong>Summary:</strong> @Model.TdeeRecommendation.Category</p>
+                            <p class="mb-0"><strong>Recommendation:</strong> @Model.TdeeRecommendation.Recommendation</p>
+                        }
                     }
                     else
                     {
@@ -87,6 +104,12 @@
                     {
                         <h3 class="text-warning">@Model.BFP.Value.ToString("F2")%</h3>
                         <p class="text-muted mb-0">Calculated</p>
+                        @if (Model.BfpRecommendation != null)
+                        {
+                            <hr />
+                            <p class="mb-1"><strong>Category:</strong> @Model.BfpRecommendation.Category</p>
+                            <p class="mb-0"><strong>Recommendation:</strong> @Model.BfpRecommendation.Recommendation</p>
+                        }
                     }
                     else
                     {
@@ -110,6 +133,12 @@
                     {
                         <h3 class="text-danger">@Model.LBM.Value.ToString("F2")</h3>
                         <p class="text-muted mb-0">lbs</p>
+                        @if (Model.LbmRecommendation != null)
+                        {
+                            <hr />
+                            <p class="mb-1"><strong>Category:</strong> @Model.LbmRecommendation.Category</p>
+                            <p class="mb-0"><strong>Recommendation:</strong> @Model.LbmRecommendation.Recommendation</p>
+                        }
                     }
                     else
                     {
@@ -133,6 +162,12 @@
                     {
                         <h3 class="text-secondary">@Model.WtHR.Value.ToString("F3")</h3>
                         <p class="text-muted mb-0">Ratio</p>
+                        @if (Model.WtHrRecommendation != null)
+                        {
+                            <hr />
+                            <p class="mb-1"><strong>Category:</strong> @Model.WtHrRecommendation.Category</p>
+                            <p class="mb-0"><strong>Recommendation:</strong> @Model.WtHrRecommendation.Recommendation</p>
+                        }
                     }
                     else
                     {

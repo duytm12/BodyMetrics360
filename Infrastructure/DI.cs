@@ -13,6 +13,7 @@ public static class DI
         // Register EF Core Repositories (Scoped lifetime for DbContext)
         services.AddScoped<IInputRepository, SqlServerInputRepository>();
         services.AddScoped<IOutputRepository, SqlServerOutputRepository>();
+        services.AddScoped<IRecommendationRepository, SqlServerRecommendationRepository>();
 
         // Register Session User Service
         services.AddScoped<ISessionUserService, SessionUserService>();

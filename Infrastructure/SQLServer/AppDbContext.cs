@@ -7,6 +7,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 {
     public DbSet<Input> Inputs { get; set; }
     public DbSet<Output> Outputs { get; set; }
+    public DbSet<Recommendation> Recommendations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -14,6 +15,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         ConfigureInputEntity(modelBuilder);
         ConfigureOutputEntity(modelBuilder);
+        ConfigureRecommendationEntity(modelBuilder);
     }
 
     private void ConfigureInputEntity(ModelBuilder modelBuilder)
@@ -59,6 +61,24 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             entity.HasIndex(e => e.InputId).HasDatabaseName("IX_UserOutput_InputId");
             entity.HasIndex(e => e.UserId).HasDatabaseName("IX_UserOutput_UserId");
             entity.HasIndex(e => e.CalculatedAt).HasDatabaseName("IX_UserOutput_CalculatedAt");
+        });
+    }
+
+    private void ConfigureRecommendationEntity(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Recommendation>(entity =>
+        {
+            entity.ToTable("UserRecommendation");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            entity.Property(e => e.UserId).HasColumnType("uniqueidentifier").IsRequired();
+            entity.Property(e => e.BmiRecommendation).HasColumnType("nvarchar(max)").IsRequired();
+            entity.Property(e => e.BmrRecommendation).HasColumnType("nvarchar(max)").IsRequired();
+            entity.Property(e => e.TdeeRecommendation).HasColumnType("nvarchar(max)").IsRequired();
+            entity.Property(e => e.BfpRecommendation).HasColumnType("nvarchar(max)").IsRequired();
+            entity.Property(e => e.LbmRecommendation).HasColumnType("nvarchar(max)").IsRequired();
+            entity.Property(e => e.WtHrRecommendation).HasColumnType("nvarchar(max)").IsRequired();
+            entity.HasIndex(e => e.UserId).HasDatabaseName("IX_UserRecommendation_UserId");
         });
     }
 }
