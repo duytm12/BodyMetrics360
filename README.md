@@ -68,6 +68,7 @@ BodyMetrics360/
 
 ### Configuration
 
+- **Authentication**: Azure App Service Publish Profile (stored as GitHub secret)
 - Connection strings stored in Azure Key Vault
 - Environment-specific `appsettings.Production.json`
 - EF Core migrations run manually before deployment to create/update database schema
