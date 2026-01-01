@@ -2,7 +2,7 @@
 
 Production-ready body metrics calculator built with Clean Architecture. Calculates Body metrics like BMI, BMR (Body Maintenance Requirements), TDEE (Total Daily Energy Expenditure), BFP (Body Fat Percentage), LBM (Lean Body Mass), and WtHR (Waist to Height ratio) with personalized recommendations.
 
-🌐 **Live Application**: [https://metrics360webapp-bmambyahbzfsgxd2.centralus-01.azurewebsites.net](https://metrics360webapp-bmambyahbzfsgxd2.centralus-01.azurewebsites.net)
+🌐 **Live Application**: [https://bodymetrics360.com](https://bodymetrics360.com)
 
 ## 🛠 Tech Stack
 
