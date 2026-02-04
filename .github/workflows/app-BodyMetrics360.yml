@@ -47,8 +47,8 @@ jobs:
       uses: azure/login@v2
       with:
         client-id: ${{ secrets.CLIENT_ID }}
-        tenant-id: ${{ vars.app_BodyMetrics360_TENANT_ID_605F }}
-        subscription-id: ${{ vars.app_BodyMetrics360_SUBSCRIPTION_ID_605F }}
+        tenant-id: ${{ secrets.TENANT_ID }}
+        subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
     - name: Deploy to Azure WebApp
       uses: azure/webapps-deploy@v2
       with:
